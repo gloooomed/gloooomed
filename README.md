@@ -1,5 +1,5 @@
 # 💫 About Me:
-🔭 I’m currently working on Abhyas: All in one career growth Platform<br>👯 I’m looking to collaborate on open-source AI and web development projects<br>🤝 I’m looking for help with backend development (Node.js, Django) and database design (PostgreSQL, MongoDB)<br>🌱 I’m currently learning Machine Learning, Data Structures & Algorithms
+Hehehehe.
 
 
 ## 🌐 Socials:
