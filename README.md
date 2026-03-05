@@ -12,8 +12,7 @@ Hehehehe.
 ![](https://nirzak-streak-stats.vercel.app/?user=gloooomed&theme=dark&hide_border=false)<br/>
 ![](https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact)
 
-  ## 💰 You can help me by Donating
-  [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/gloooomed) 
+[![Buy Me A Chai](https://buymeachai.ezee.li/assets/images/buymeachai-button.png)](https://buymeachai.ezee.li/gloooomed)
 
   
 <!-- Proudly created with GPRM ( https://gprm.itsvg.in ) -->
