@@ -10,7 +10,7 @@ Hehehehe.
 # 📊 GitHub Stats:
 ![](https://github-readme-streak-stats.herokuapp.com/?user=gloooomed)<br/>
 ![](https://nirzak-streak-stats.vercel.app/?user=gloooomed&theme=dark&hide_border=false)<br/>
-![](https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact)
+![](https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact)<br/>
 [![Buy Me A Chai](https://buymeachai.ezee.li/assets/images/buymeachai-button.png)](https://buymeachai.ezee.li/gloooomed)
 
   
