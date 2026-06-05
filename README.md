@@ -63,9 +63,11 @@
 
 ## GitHub Stats
 
-| Streak | Top Languages |
-|:---:|:---:|
-| ![streak](assets/streak.svg) | ![langs](assets/top-langs.svg) |
+
+
+![streak](assets/streak.svg)
+
+![langs](assets/top-langs.svg)
 
 <!-- SVGs are auto-updated every 6h by .github/workflows/update-stats.yml -->
 
