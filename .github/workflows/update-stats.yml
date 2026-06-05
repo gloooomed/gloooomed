@@ -16,10 +16,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Fetch streak stats SVG
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           curl -s "https://github-readme-streak-stats-eight.vercel.app/?user=gloooomed&theme=dark&hide_border=false" \
+            -H "Authorization: token $GH_TOKEN" \
             -o assets/streak.svg
-          head -1 assets/streak.svg | grep -q "<svg" || echo "WARNING: streak.svg may be invalid"
+          head -1 assets/streak.svg | grep -q "<svg" && echo "streak.svg OK" || (
+            echo "streak failed, trying demolab..."
+            curl -s "https://streak-stats.demolab.com/?user=gloooomed&theme=dark&hide_border=false" \
+              -o assets/streak.svg
+          )
 
       - name: Fetch top langs SVG
         run: |
@@ -30,7 +37,7 @@ jobs:
             curl -s "https://github-readme-stats-eight.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark" \
               -o assets/top-langs.svg
           fi
-          head -1 assets/top-langs.svg | grep -q "<svg" && echo "top-langs.svg OK" || echo "WARNING: top-langs.svg may be invalid"
+          head -1 assets/top-langs.svg | grep -q "<svg" && echo "top-langs.svg OK" || echo "WARNING: top-langs.svg invalid"
 
       - name: Commit updated SVGs
         run: |
