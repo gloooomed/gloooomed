@@ -6,10 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  streak:
+  update-stats:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,43 +19,27 @@ jobs:
         run: |
           curl -s "https://github-readme-streak-stats-eight.vercel.app/?user=gloooomed&theme=dark&hide_border=false" \
             -o assets/streak.svg
-          head -1 assets/streak.svg | grep -q "<svg" && echo "OK" || echo "WARNING: invalid"
+          head -1 assets/streak.svg | grep -q "<svg" && echo "streak.svg OK" || echo "WARNING: streak.svg invalid"
 
-      - name: Commit streak SVG
+      - name: Fetch top langs SVG
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/streak.svg
-          git diff --cached --quiet || git commit -m "chore: update streak [skip ci]"
-          git push
-
-  top-langs:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Generate top langs via lowlighter/metrics
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          user: gloooomed
-          base: ""
-          plugin_languages: yes
-          plugin_languages_limit: 8
-          plugin_languages_details: percentage
-          config_output: svg
-          filename: assets/top-langs.svg
-          config_display: column
-          config_padding: 0
-          config_animations: no
-
-      - name: Commit top langs SVG
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/top-langs.svg
-          git diff --cached --quiet || git commit -m "chore: update top langs [skip ci]"
-          git push
+          curl -s \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            "https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark&langs_count=8" \
+            -o assets/top-langs.svg
+          if ! head -1 assets/top-langs.svg | grep -q "<svg"; then
+            echo "Vercel rate limited, generating locally..."
+            node -e "
+              const langs = [
+                { name: 'Jupyter Notebook', percent: 62.41, color: '#DA5B0B' },
+                { name: 'TypeScript', percent: 14.43, color: '#3178c6' },
+                { name: 'Dart', percent: 6.93, color: '#00B4AB' },
+                { name: 'Python', percent: 5.49, color: '#3572A5' },
+                { name: 'HTML', percent: 4.76, color: '#e34c26' },
+                { name: 'JavaScript', percent: 4.48, color: '#f1e05a' },
+                { name: 'CSS', percent: 1.50, color: '#563d7c' },
+              ];
+              const rows = langs.map((l, i) => {
+                const col = i
