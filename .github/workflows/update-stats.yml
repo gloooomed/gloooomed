@@ -22,6 +22,8 @@ jobs:
           if ! head -1 assets/streak.svg | grep -q "<svg"; then
             if [ -f /tmp/streak.svg ]; then
               mv /tmp/streak.svg assets/streak.svg
+            else
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16">streak stats unavailable</text></svg>\n' > assets/streak.svg
             fi
           fi
 
@@ -34,12 +36,15 @@ jobs:
           if ! head -1 assets/top-langs.svg | grep -q "<svg"; then
             if [ -f /tmp/top-langs.svg ]; then
               mv /tmp/top-langs.svg assets/top-langs.svg
+            else
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16">top language stats unavailable</text></svg>\n' > assets/top-langs.svg
             fi
           fi
 
       - name: Commit and push if changed
         run: |
           if git diff --quiet -- assets/streak.svg assets/top-langs.svg; then
+            echo "No SVG updates detected"
             exit 0
           fi
           git config user.name "github-actions[bot]"
