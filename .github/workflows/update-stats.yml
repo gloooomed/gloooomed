@@ -17,29 +17,42 @@ jobs:
 
       - name: Fetch streak SVG
         run: |
-          curl -s "https://github-readme-streak-stats-eight.vercel.app/?user=gloooomed&theme=dark&hide_border=false" \
-            -o assets/streak.svg
-          head -1 assets/streak.svg | grep -q "<svg" && echo "streak.svg OK" || echo "WARNING: streak.svg invalid"
+          if [ -f assets/streak.svg ]; then
+            cp assets/streak.svg /tmp/streak.svg
+          fi
+          curl -s "https://github-readme-streak-stats-eight.vercel.app/?user=gloooomed&theme=dark&hide_border=false" -o assets/streak.svg
+          if ! head -1 assets/streak.svg | grep -q "<svg"; then
+            if [ -f /tmp/streak.svg ]; then
+              mv /tmp/streak.svg assets/streak.svg
+            else
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="495" height="195"><text x="16" y="30" font-size="20" fill="#c9d1d9">streak stats unavailable</text></svg>\n' > assets/streak.svg
+            fi
+          fi
 
       - name: Fetch top langs SVG
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          curl -s \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            "https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark&langs_count=8" \
-            -o assets/top-langs.svg
+          if [ -f assets/top-langs.svg ]; then
+            cp assets/top-langs.svg /tmp/top-langs.svg
+          fi
+          curl -s -H "Authorization: Bearer $GH_TOKEN" "https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark&langs_count=8" -o assets/top-langs.svg
           if ! head -1 assets/top-langs.svg | grep -q "<svg"; then
-            echo "Vercel rate limited, generating locally..."
-            node -e "
-              const langs = [
-                { name: 'Jupyter Notebook', percent: 62.41, color: '#DA5B0B' },
-                { name: 'TypeScript', percent: 14.43, color: '#3178c6' },
-                { name: 'Dart', percent: 6.93, color: '#00B4AB' },
-                { name: 'Python', percent: 5.49, color: '#3572A5' },
-                { name: 'HTML', percent: 4.76, color: '#e34c26' },
-                { name: 'JavaScript', percent: 4.48, color: '#f1e05a' },
-                { name: 'CSS', percent: 1.50, color: '#563d7c' },
-              ];
-              const rows = langs.map((l, i) => {
-                const col = i
+            if [ -f /tmp/top-langs.svg ]; then
+              mv /tmp/top-langs.svg assets/top-langs.svg
+            else
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="480" height="142"><text x="16" y="30" font-size="20" fill="#c9d1d9">top language stats unavailable</text></svg>\n' > assets/top-langs.svg
+            fi
+          fi
+
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet -- assets/streak.svg assets/top-langs.svg; then
+            echo "No SVG updates detected"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/streak.svg assets/top-langs.svg
+          git commit -m "chore: update GitHub stats SVGs"
+          git push
