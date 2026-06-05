@@ -23,7 +23,7 @@ jobs:
             if [ -f /tmp/streak.svg ]; then
               mv /tmp/streak.svg assets/streak.svg
             else
-              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16">streak stats unavailable</text></svg>\n' > assets/streak.svg
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16" fill="#c9d1d9">streak stats unavailable</text></svg>\n' > assets/streak.svg
             fi
           fi
 
@@ -37,7 +37,7 @@ jobs:
             if [ -f /tmp/top-langs.svg ]; then
               mv /tmp/top-langs.svg assets/top-langs.svg
             else
-              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16">top language stats unavailable</text></svg>\n' > assets/top-langs.svg
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16" fill="#c9d1d9">top language stats unavailable</text></svg>\n' > assets/top-langs.svg
             fi
           fi
 
