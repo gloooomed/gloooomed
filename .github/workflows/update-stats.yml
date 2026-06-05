@@ -19,11 +19,18 @@ jobs:
         run: |
           curl -s "https://github-readme-streak-stats-eight.vercel.app/?user=gloooomed&theme=dark&hide_border=false" \
             -o assets/streak.svg
+          head -1 assets/streak.svg | grep -q "<svg" || echo "WARNING: streak.svg may be invalid"
 
       - name: Fetch top langs SVG
         run: |
-          curl -s "https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark" \
+          curl -s "https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark&cache_seconds=1800" \
             -o assets/top-langs.svg
+          if ! head -1 assets/top-langs.svg | grep -q "<svg"; then
+            echo "Primary source failed, trying mirror..."
+            curl -s "https://github-readme-stats-eight.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark" \
+              -o assets/top-langs.svg
+          fi
+          head -1 assets/top-langs.svg | grep -q "<svg" && echo "top-langs.svg OK" || echo "WARNING: top-langs.svg may be invalid"
 
       - name: Commit updated SVGs
         run: |
