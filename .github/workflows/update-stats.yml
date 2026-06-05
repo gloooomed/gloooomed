@@ -6,43 +6,55 @@ on:
   workflow_dispatch:
 
 jobs:
-  update-stats:
+  streak:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch streak stats SVG
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Fetch streak SVG
         run: |
           curl -s "https://github-readme-streak-stats-eight.vercel.app/?user=gloooomed&theme=dark&hide_border=false" \
-            -H "Authorization: token $GH_TOKEN" \
             -o assets/streak.svg
-          head -1 assets/streak.svg | grep -q "<svg" && echo "streak.svg OK" || (
-            echo "streak failed, trying demolab..."
-            curl -s "https://streak-stats.demolab.com/?user=gloooomed&theme=dark&hide_border=false" \
-              -o assets/streak.svg
-          )
+          head -1 assets/streak.svg | grep -q "<svg" && echo "OK" || echo "WARNING: invalid"
 
-      - name: Fetch top langs SVG
-        run: |
-          curl -s "https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark&cache_seconds=1800" \
-            -o assets/top-langs.svg
-          if ! head -1 assets/top-langs.svg | grep -q "<svg"; then
-            echo "Primary source failed, trying mirror..."
-            curl -s "https://github-readme-stats-eight.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark" \
-              -o assets/top-langs.svg
-          fi
-          head -1 assets/top-langs.svg | grep -q "<svg" && echo "top-langs.svg OK" || echo "WARNING: top-langs.svg invalid"
-
-      - name: Commit updated SVGs
+      - name: Commit streak SVG
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/streak.svg assets/top-langs.svg
-          git diff --cached --quiet || git commit -m "chore: update github stats [skip ci]"
+          git add assets/streak.svg
+          git diff --cached --quiet || git commit -m "chore: update streak [skip ci]"
+          git push
+
+  top-langs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate top langs via lowlighter/metrics
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          user: gloooomed
+          base: ""
+          plugin_languages: yes
+          plugin_languages_limit: 8
+          plugin_languages_details: percentage
+          config_output: svg
+          filename: assets/top-langs.svg
+          config_display: column
+          config_padding: 0
+          config_animations: no
+
+      - name: Commit top langs SVG
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/top-langs.svg
+          git diff --cached --quiet || git commit -m "chore: update top langs [skip ci]"
           git push
