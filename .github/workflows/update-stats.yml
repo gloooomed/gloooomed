@@ -17,13 +17,15 @@ jobs:
 
       - name: Fetch streak SVG
         run: |
-          cp assets/streak.svg /tmp/streak.svg 2>/dev/null || true
+          if [ -f assets/streak.svg ]; then
+            cp assets/streak.svg /tmp/streak.svg
+          fi
           curl -s "https://github-readme-streak-stats-eight.vercel.app/?user=gloooomed&theme=dark&hide_border=false" -o assets/streak.svg
           if ! head -1 assets/streak.svg | grep -q "<svg"; then
             if [ -f /tmp/streak.svg ]; then
               mv /tmp/streak.svg assets/streak.svg
             else
-              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16" fill="#c9d1d9">streak stats unavailable</text></svg>\n' > assets/streak.svg
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="495" height="195"><text x="16" y="30" font-size="20" fill="#c9d1d9">streak stats unavailable</text></svg>\n' > assets/streak.svg
             fi
           fi
 
@@ -31,13 +33,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          cp assets/top-langs.svg /tmp/top-langs.svg 2>/dev/null || true
+          if [ -f assets/top-langs.svg ]; then
+            cp assets/top-langs.svg /tmp/top-langs.svg
+          fi
           curl -s -H "Authorization: Bearer $GH_TOKEN" "https://github-readme-stats.vercel.app/api/top-langs/?username=gloooomed&hide_border=false&include_all_commits=true&count_private=true&layout=compact&theme=dark&langs_count=8" -o assets/top-langs.svg
           if ! head -1 assets/top-langs.svg | grep -q "<svg"; then
             if [ -f /tmp/top-langs.svg ]; then
               mv /tmp/top-langs.svg assets/top-langs.svg
             else
-              printf '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40"><text x="16" y="25" font-size="16" fill="#c9d1d9">top language stats unavailable</text></svg>\n' > assets/top-langs.svg
+              printf '<svg xmlns="http://www.w3.org/2000/svg" width="480" height="142"><text x="16" y="30" font-size="20" fill="#c9d1d9">top language stats unavailable</text></svg>\n' > assets/top-langs.svg
             fi
           fi
 
