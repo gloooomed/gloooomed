@@ -58,19 +58,22 @@
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 
-
+---
 
 ## GitHub Stats
 
-
-
-![streak](assets/streak.svg)
-
-![langs](assets/top-langs.svg)
+<div align="center">
+  <img src="assets/streak.svg" height="150" />
+  <img src="assets/top-langs.svg" height="150" />
+  <img src="assets/stats.svg" height="150" />
+</div>
 
 <img src="https://github-readme-activity-graph.vercel.app/graph?username=gloooomed&theme=github-compact&hide_border=true&bg_color=00000000&color=8b949e&line=58a6ff&point=58a6ff&area=true&area_color=58a6ff" width="100%" alt="activity" />
 
 <!-- SVGs are auto-updated every 6h by .github/workflows/update-stats.yml -->
+
+---
+
 ## Support
 
 <a href="https://buymeachai.ezee.li/gloooomed">
